@@ -1,9 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Header from "./Header";
-
+import { checkValidateData } from "../utils/validate";
 const Login = () => {
+    const email = useRef(null);
+    const password = useRef(null);
   const [isSignInForm, setIsSignInForm] = useState(true);
-
+    const [errorMessage, setErrorMessage] = useState(null);
+    const handleFormData = () => {
+        const message = checkValidateData(email.current.value, password.current.value);
+        setErrorMessage(message);
+        console.log(email.current.value);
+        console.log(password.current.value);
+    }
+    
   const toggleSignInForm = () => {
     return setIsSignInForm(!isSignInForm);
   };
@@ -19,7 +28,7 @@ const Login = () => {
         />{" "}
         <div className="bg-black absolute inset-0 opacity-50 "></div>
         <div className="bg-black bg-opacity-75 absolute rounded-sm w-[450px] top-32 h-fit pb-20 mx-auto left-0 right-0">
-          <form className="mx-auto right-0 left-0 justify-center px-14">
+          <form onSubmit={(e)=>{e.preventDefault()}} className="mx-auto right-0 left-0 justify-center px-14">
                       <h1 className=" text-white font-bold text-3xl items-start pt-10">
                           {isSignInForm ? "Sign In" : "Sign Up"}
              
@@ -31,19 +40,22 @@ const Login = () => {
               placeholder="Enter Full Name"
             ></input>)}
 
-            <input
+                      <input
+                          ref={email}
               className=" w-80 my-4 px-2 py-4 rounded-md bg-opacity-55 text-white bg-gray-800 border border-gray-400 placeholder:"
               type="text"
               name=""
               placeholder="Email or mobile number"
             ></input>
-            <input
+                      <input
+                          ref={password}
               className="w-80 px-2 py-4 rounded-md bg-opacity-55 text-white bg-gray-800 border border-gray-400"
               type="password"
               name=""
               placeholder="Password"
-            ></input>
-            <button className=" bg-red-700 w-80 text-white py-2 my-4 rounded-md">
+                      ></input>
+                      <p className="text-red-600 text-xl">{errorMessage}</p>
+            <button onClick={handleFormData} className=" bg-red-700 w-80 text-white py-2 my-4 rounded-md">
             {isSignInForm ? "Sign In" : "Sign Up"}
             </button>
             <p className="text-white" onClick={toggleSignInForm}>
